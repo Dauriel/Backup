@@ -22,48 +22,48 @@ import javafx.stage.Stage;
  *
  * @author Ian Ward
  */
-public class MainScreenController implements Initializable {
-
+public class SessionScreenController implements Initializable {
     private Stage primaryStage;
+    private Scene prevScene;
+    private String prevTitle;
     @FXML
-    private Button btnMakeReservation;
+    private Button btnGoBack;
     @FXML
-    private Button btnMakeTicketSale;
-    @FXML
-    private Button btnMakeReservationSale;
-
-    public void initStage(Stage stage) {
-        primaryStage = stage;
-    }
-
+    private Button btnContinue;
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+    }    
+
+    void initStage(Stage stage) {
+        primaryStage = stage;
+        prevScene = stage.getScene();
+        prevTitle = stage.getTitle();
+        primaryStage.setTitle("Choose Session");
     }
 
     @FXML
-    private void btnMakeReservation_Click(ActionEvent event) {
+    private void btnGoBack_Click(ActionEvent event) {
+        primaryStage.setTitle(prevTitle);
+        primaryStage.setScene(prevScene);
+    }
+
+    @FXML
+    private void btnContinue_Click(ActionEvent event) {
         try {
-            FXMLLoader myLoader = new FXMLLoader(getClass().getResource("/view/DayMovieScreen.fxml"));
+            FXMLLoader myLoader = new FXMLLoader(getClass().getResource("/view/NSeatsScreen.fxml"));
             Parent root = (Parent) myLoader.load();
-            DayMovieScreenController w = myLoader.<DayMovieScreenController>getController();
-            w.initStage(primaryStage);
+            NSeatsScreenController window;
+            window = myLoader.<NSeatsScreenController>getController();
+            window.initStage(primaryStage);
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @FXML
-        private void btnMakeTicketSale_Click(ActionEvent event) {
-    }
-
-    @FXML
-        private void btnMakeReservationSale_Click(ActionEvent event) {
     }
     
 }

@@ -5,6 +5,7 @@
  */
 package application;
 
+import controller.MainScreenController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,12 +20,19 @@ public class TicketOffice extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/MainScreen.fxml"));
-        
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainScreen.fxml"));
+        Parent root = loader.load();
         Scene scene = new Scene(root);
-        
+        MainScreenController mainController = loader.<MainScreenController>getController();
+        mainController.initStage(stage);
+
+        stage.setTitle("Ticket Office");
         stage.setScene(scene);
         stage.show();
+        
+
+
+
     }
 
     /**
