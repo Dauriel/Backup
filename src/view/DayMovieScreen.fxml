@@ -22,7 +22,7 @@
                   <Font size="15.0" />
                </font>
             </Label>
-            <DatePicker minHeight="-Infinity" minWidth="-Infinity" promptText="Enter Date" />
+            <DatePicker fx:id="date" minHeight="-Infinity" minWidth="-Infinity" onAction="#dateEntered" promptText="Enter Date" />
          </children>
          <padding>
             <Insets right="10.0" />

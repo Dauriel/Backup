@@ -5,7 +5,6 @@
  */
 package controller;
 
-import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -15,11 +14,14 @@ import javafx.stage.Stage;
 import modelo.Pelicula;
 import accesoaBD.AccesoaBD;
 import java.io.IOException;
+import java.time.LocalDate;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -33,7 +35,6 @@ import javafx.scene.text.Text;
 public class DayMovieScreenController implements Initializable {
 
     private Stage primaryStage;
-    private final String PATH = "";
     @FXML
     private TilePane tile;
     @FXML
@@ -42,6 +43,8 @@ public class DayMovieScreenController implements Initializable {
     private Button btnContinue;
     private String prevTitle;
     private Scene prevScene;
+    @FXML
+    private DatePicker date;
 
     /**
      * Initializes the controller class.
@@ -55,20 +58,6 @@ public class DayMovieScreenController implements Initializable {
         primaryStage = stage;
         prevScene = stage.getScene();
         prevTitle = stage.getTitle();
-        File dir = new File(PATH);
-        AccesoaBD db = new AccesoaBD();
-        for (Pelicula p : db.getTodasPeliculas()) {
-            Image img = new Image(p.getPathImage(), 200, 200, true, true);
-            ImageView iview = new ImageView(img);
-            iview.setFitWidth(200);
-            iview.setFitHeight(200);
-            iview.setPreserveRatio(true);
-            Text txt = new Text(p.getTitulo());
-
-            VBox box = new VBox(10, iview, txt);
-
-            tile.getChildren().add(box);
-        }
         primaryStage.setTitle("Choose Day and Movie");
     }
 
@@ -80,6 +69,36 @@ public class DayMovieScreenController implements Initializable {
 
     @FXML
     private void btnContinue_Click(ActionEvent event) {
+        continueClick();
+    }
+
+    @FXML
+    private void dateEntered(ActionEvent event) {
+        updateMovies();
+    }
+
+    private void updateMovies() {
+        LocalDate localDate;
+        localDate = date.getValue();
+        AccesoaBD db = new AccesoaBD();
+        for (Pelicula p : db.getPeliculas(localDate)) {
+            Image img = new Image(p.getPathImage(), 200, 200, true, true);
+            ImageView iview = new ImageView(img);
+            iview.setFitWidth(200);
+            iview.setFitHeight(200);
+            iview.setPreserveRatio(true);
+            Text txt = new Text(p.getTitulo());
+            
+            iview.setOnMouseClicked(e -> continueClick());
+            txt.setOnMouseClicked(e -> continueClick());
+            
+            VBox box = new VBox(10, iview, txt);
+            box.setAlignment(Pos.CENTER);
+            tile.getChildren().add(box);
+        }
+    }
+
+    private void continueClick() {
         try {
             FXMLLoader myLoader = new FXMLLoader(getClass().getResource("/view/SessionScreen.fxml"));
             Parent root = (Parent) myLoader.load();
