@@ -60,7 +60,16 @@ public class MainScreenController implements Initializable {
 
     @FXML
         private void btnMakeTicketSale_Click(ActionEvent event) {
-    }
+            try {
+            FXMLLoader myLoader = new FXMLLoader(getClass().getResource("/view/Seats.fxml"));
+            Parent root = (Parent) myLoader.load();
+            SeatsController r = myLoader.<SeatsController>getController();
+            r.initStage(primaryStage);
+            Scene scene = new Scene(root);
+            primaryStage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     @FXML
         private void btnMakeReservationSale_Click(ActionEvent event) {
