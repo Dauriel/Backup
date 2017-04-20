@@ -7,6 +7,7 @@ package controller;
 
 import accesoaBD.AccesoaBD;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -19,6 +20,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import modelo.Proyeccion;
+import modelo.Reserva;
 
 /**
  * FXML Controller class
@@ -56,14 +59,9 @@ public class TicketFromRController implements Initializable {
         prevScene = stage.getScene();
         prevTitle = stage.getTitle();
 
-        phoneText.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable,
-                    String oldValue, String newValue) {
-
-                if (phoneText.getText().length() > 9) {
-                    phoneText.setText(oldValue);
-                }
+        phoneText.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (phoneText.getText().length() > 9) {
+                phoneText.setText(oldValue);
             }
         });
 
@@ -73,11 +71,15 @@ public class TicketFromRController implements Initializable {
     private void findClick(ActionEvent event) {
         boolean check = checker();
         if (check) {
-            AccesoaBD aux = new AccesoaBD();
-            for (int i = 1; i < 10; i++) {
-
+            Proyeccion p = reservaExistente();
+            if (p != null) {
+               notFound.setText("");
+               
+            } else {
+                notFound.setText("Reservation not found");
             }
         }
+
     }
 
     private boolean phoneChecker() {
@@ -121,4 +123,20 @@ public class TicketFromRController implements Initializable {
         primaryStage.setTitle(prevTitle);
         primaryStage.setScene(prevScene);
     }
+
+    private Proyeccion reservaExistente() {
+        AccesoaBD aux = new AccesoaBD();
+        for (int i = 1; i < 10; i++) {
+            LocalDate date = LocalDate.of(2017, 4, i);
+            for (Proyeccion p : aux.getProyeccionesDia(date)) {
+                for (Reserva r : p.getReservas()) {
+                    if (r.getNombre().equals(nameText.getText()) && r.getTelefono().equals(phoneText.getText())) {
+                        return p;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
 }
