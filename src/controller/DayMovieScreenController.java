@@ -15,6 +15,7 @@ import modelo.Pelicula;
 import accesoaBD.AccesoaBD;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -22,6 +23,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -33,19 +36,22 @@ import javafx.scene.text.Text;
  * @author Ian Ward
  */
 public class DayMovieScreenController implements Initializable {
-
+    private VBox aux;
     private Stage primaryStage;
     @FXML
     private TilePane tile;
     @FXML
     private Button btnGoBack;
-    @FXML
-    private Button btnContinue;
     private String prevTitle;
     private Scene prevScene;
     @FXML
     private DatePicker date;
-
+    //Movie Info
+    String tituloPelicula;
+    LocalDate dia;
+    @FXML
+    private Label errDate;
+    
     /**
      * Initializes the controller class.
      */
@@ -67,38 +73,52 @@ public class DayMovieScreenController implements Initializable {
         primaryStage.setScene(prevScene);
     }
 
-    @FXML
     private void btnContinue_Click(ActionEvent event) {
         continueClick();
     }
 
     @FXML
     private void dateEntered(ActionEvent event) {
-        updateMovies();
+        dia = date.getValue();
+        updateMovies(); 
     }
 
     private void updateMovies() {
         LocalDate localDate;
         localDate = date.getValue();
         AccesoaBD db = new AccesoaBD();
-        for (Pelicula p : db.getPeliculas(localDate)) {
-            Image img = new Image(p.getPathImage(), 200, 200, true, true);
-            ImageView iview = new ImageView(img);
-            iview.setFitWidth(200);
-            iview.setFitHeight(200);
-            iview.setPreserveRatio(true);
-            Text txt = new Text(p.getTitulo());
-            
-            iview.setOnMouseClicked(e -> continueClick());
-            txt.setOnMouseClicked(e -> continueClick());
-            
-            VBox box = new VBox(10, iview, txt);
-            box.setAlignment(Pos.CENTER);
-            tile.getChildren().add(box);
-        }
+        List<Pelicula> list = db.getPeliculas(localDate);
+        System.out.println(list);
+        if(!list.isEmpty()){
+            for (Pelicula p : list) {
+                Image img = new Image(p.getPathImage(), 200, 200, true, true);
+                ImageView iview = new ImageView(img);
+                iview.setFitWidth(200);
+                iview.setFitHeight(200);
+                iview.setPreserveRatio(true);
+                String titulo = p.getTitulo();
+                Text txt = new Text(titulo);
+
+                Tooltip t = new Tooltip(titulo);
+                Tooltip.install(iview, t);
+                Tooltip.install(txt, t);
+
+                VBox box = new VBox(10, iview, txt);
+                box.setAlignment(Pos.CENTER);
+                tile.getChildren().add(box);
+
+                box.setOnMouseClicked(e -> {
+                    aux = (VBox) e.getSource();
+                    continueClick();
+                });
+
+         }
+        } else {errDate.setText("No Movies Found");}
     }
 
     private void continueClick() {
+        tituloPelicula = ((Text) aux.getChildren().get(1)).getText() ;
+       
         try {
             FXMLLoader myLoader = new FXMLLoader(getClass().getResource("/view/SessionScreen.fxml"));
             Parent root = (Parent) myLoader.load();
