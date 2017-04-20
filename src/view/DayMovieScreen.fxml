@@ -38,7 +38,7 @@
                </GridPane.margin>
             </Label>
             <DatePicker fx:id="date" minHeight="-Infinity" minWidth="-Infinity" onAction="#dateEntered" promptText="mm/dd/yyyy" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label alignment="CENTER" prefHeight="21.0" prefWidth="339.0" text="Click on a Movie Poster to choose it:" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
+            <Label alignment="CENTER" prefHeight="21.0" prefWidth="339.0" text="Click on a Movie Poster to choose a Movie:" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
                <font>
                   <Font name="SansSerif Bold" size="18.0" />
                </font>
