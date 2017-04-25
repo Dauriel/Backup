@@ -6,14 +6,15 @@
 package controller;
 
 import accesoaBD.AccesoaBD;
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -48,6 +49,8 @@ public class TicketFromRController implements Initializable {
     private Text nameShortText;
     @FXML
     private TextField nameText;
+    private Proyeccion proyeccion;
+    private Reserva reserva;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -71,10 +74,9 @@ public class TicketFromRController implements Initializable {
     private void findClick(ActionEvent event) {
         boolean check = checker();
         if (check) {
-            Proyeccion p = reservaExistente();
-            if (p != null) {
-               notFound.setText("");
-               
+            proyeccion = reservaExistente();
+            if (proyeccion != null) {
+                nextWindow();
             } else {
                 notFound.setText("Reservation not found");
             }
@@ -131,12 +133,28 @@ public class TicketFromRController implements Initializable {
             for (Proyeccion p : aux.getProyeccionesDia(date)) {
                 for (Reserva r : p.getReservas()) {
                     if (r.getNombre().equals(nameText.getText()) && r.getTelefono().equals(phoneText.getText())) {
+                        reserva = r;
                         return p;
                     }
                 }
+
             }
         }
         return null;
     }
 
+    private void nextWindow() {
+        try {
+            FXMLLoader myLoader = new FXMLLoader(getClass().getResource("/view/Seats.fxml"));
+            Parent root = (Parent) myLoader.load();
+            SeatsController window;
+            window = myLoader.<SeatsController>getController();
+            window.initStage2(primaryStage, proyeccion, reserva);
+            Scene scene = new Scene(root);
+            primaryStage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
 }

@@ -5,6 +5,7 @@
  */
 package controller;
 
+import accesoaBD.AccesoaBD;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -34,6 +35,8 @@ public class MainScreenController implements Initializable {
 
     public void initStage(Stage stage) {
         primaryStage = stage;
+        AccesoaBD base = new AccesoaBD();
+        
     }
 
     /**
@@ -46,35 +49,17 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private void btnMakeReservation_Click(ActionEvent event) {
+        swapWindow(false);
+    }
+
+    @FXML
+    private void btnMakeTicketSale_Click(ActionEvent event) {
+        swapWindow(true);
+    }
+
+    @FXML
+    private void btnMakeReservationSale_Click(ActionEvent event) {
         try {
-            FXMLLoader myLoader = new FXMLLoader(getClass().getResource("/view/DayMovieScreen.fxml"));
-            Parent root = (Parent) myLoader.load();
-            DayMovieScreenController w = myLoader.<DayMovieScreenController>getController();
-            w.initStage(primaryStage);
-            Scene scene = new Scene(root);
-            primaryStage.setScene(scene);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-        private void btnMakeTicketSale_Click(ActionEvent event) {
-            try {
-            FXMLLoader myLoader = new FXMLLoader(getClass().getResource("/view/Seats.fxml"));
-            Parent root = (Parent) myLoader.load();
-            SeatsController r = myLoader.<SeatsController>getController();
-            r.initStage(primaryStage);
-            Scene scene = new Scene(root);
-            primaryStage.setScene(scene);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-        private void btnMakeReservationSale_Click(ActionEvent event) {
-            try {
             FXMLLoader myLoader = new FXMLLoader(getClass().getResource("/view/TicketFromR.fxml"));
             Parent root = (Parent) myLoader.load();
             TicketFromRController r = myLoader.<TicketFromRController>getController();
@@ -86,4 +71,22 @@ public class MainScreenController implements Initializable {
         }
     }
     
+    private void swapWindow(boolean one){
+    try {
+            FXMLLoader myLoader = new FXMLLoader(getClass().getResource("/view/DayMovieScreen.fxml"));
+            Parent root = (Parent) myLoader.load();
+            DayMovieScreenController w = myLoader.<DayMovieScreenController>getController();
+            w.initStage(primaryStage, one);
+            Scene scene = new Scene(root);
+            primaryStage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }    
+    }
+
+    @FXML
+    private void quit_Click(ActionEvent event) {
+        primaryStage.hide();
+    }
+
 }
