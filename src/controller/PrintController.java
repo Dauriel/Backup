@@ -69,6 +69,7 @@ public class PrintController implements Initializable {
         sesion.setText(proyeccion.getHoraInicio());
         sitios.setText("" + counter);
         selPrinter.setText("" + printer);
+        primaryStage.setTitle("Print tickets");
     }
     @FXML
     private void selectPrinter(ActionEvent event) {

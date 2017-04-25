@@ -35,6 +35,7 @@ public class MainScreenController implements Initializable {
 
     public void initStage(Stage stage) {
         primaryStage = stage;
+        primaryStage.setTitle("Ticket Office");
         AccesoaBD base = new AccesoaBD();
         
     }

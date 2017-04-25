@@ -61,6 +61,7 @@ public class Confirmation1Controller implements Initializable {
         primaryStage = stage;
         prevScene = stage.getScene();
         prevTitle = stage.getTitle();
+        primaryStage.setTitle("Confirm your reservation");
         proyeccion = p;
         reserva = r;
         pelicula.setText(proyeccion.getPelicula().getTitulo());

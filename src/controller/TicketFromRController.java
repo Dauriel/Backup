@@ -61,7 +61,7 @@ public class TicketFromRController implements Initializable {
         primaryStage = stage;
         prevScene = stage.getScene();
         prevTitle = stage.getTitle();
-
+        primaryStage.setTitle("Enter reservation details");
         phoneText.textProperty().addListener((observable, oldValue, newValue) -> {
             if (phoneText.getText().length() > 9) {
                 phoneText.setText(oldValue);
@@ -156,5 +156,5 @@ public class TicketFromRController implements Initializable {
             e.printStackTrace();
         }
     }
-    
+
 }

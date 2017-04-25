@@ -72,6 +72,7 @@ public class SeatsController implements Initializable {
     }
 
     public void iniciar() {
+        primaryStage.setTitle("Select your seats");
         nombrePelicula.setText(proyeccion.getPelicula().getTitulo());
         diaPelicula.setText(proyeccion.getDia().toString());
         horaPelicula.setText(proyeccion.getHoraInicio());
